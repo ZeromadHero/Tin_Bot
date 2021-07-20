@@ -32,53 +32,62 @@ def Swipe():
     bioElem = '//*[@id="q633216204"]/div/div[1]/div/main/div[1]/div/div/div[1]/div[1]/div/div[3]/div[3]'  
     popup1 = '//*[@id="q-1095164872"]/div/div/div[2]/button[2]'
 
-    while(True):
+    try:
+        while(True):
 
-        #create key action
-        action = ActionChains(driver)
+            #create key action
+            action = ActionChains(driver)
 
-        #kill popups if there are any
-        try:
-            driver.find_element_by_xpath(popup1).click()
-        except:
-            None
-        
-        #get current time for timestamp
-        time.sleep(1.5)
-        t = time.localtime()
-        current_time = time.strftime("%H:%M:%S", t)
+            #kill popups if there are any
+            try:
+                driver.find_element_by_xpath(popup1).click()
+            except:
+                None
+            
+            #get current time for timestamp
+            time.sleep(1.5)
+            t = time.localtime()
+            current_time = time.strftime("%H:%M:%S", t)
 
-        #get biography text
-        hit = False
-        hitWord = ''
-        bioText = driver.find_element_by_xpath(bioElem).text
+            #get biography text
+            hit = False
+            hitWord = ''
+            bioText = driver.find_element_by_xpath(bioElem).text
 
-        #check if one of the keywords exists in the biography
-        for keyword in keywords:
-            if keyword in bioText or keyword.lower() in bioText or keyword.upper() in bioText:
-                hit = True
-                hitWord = keyword
-                break
-        
-        #if keyword exists wait for input
-        if hit:
-            SetConsoleColor('Green')
-            print('[{}] Found profile with keyword "{}".\nLike? (Y/N)\n'.format(current_time, hitWord))
-            SetConsoleColor('Reset')
-            x = input('')
-            if x.lower() == 'y':
-                action.send_keys(Keys.ARROW_RIGHT)
-                action.perform()
+            #check if one of the keywords exists in the biography
+            for keyword in keywords:
+                if keyword in bioText or keyword.lower() in bioText or keyword.upper() in bioText:
+                    hit = True
+                    hitWord = keyword
+                    break
+            
+            #if keyword exists wait for input
+            if hit:
+                SetConsoleColor('Green')
+                print('[{}] Found profile with keyword "{}".\nLike? (Y/N)\n'.format(current_time, hitWord))
+                SetConsoleColor('Reset')
+                x = input('')
+                if x.lower() == 'y':
+                    action.send_keys(Keys.ARROW_RIGHT)
+                    action.perform()
+                else:
+                    action.send_keys(Keys.ARROW_LEFT)
+                    action.perform()
             else:
+                SetConsoleColor('Red')
+                print('[{}] Criteria not matched\n'.format(current_time))
+                SetConsoleColor('Reset')
                 action.send_keys(Keys.ARROW_LEFT)
                 action.perform()
+    except:
+        print('[{}] No profiles left to swipe (or other exception).\nRetry? (Y/N)'.format(time.strftime("%H:%M:%S", time.localtime())))
+        x = input('')
+
+        if x.lower() == 'y':
+            Swipe()
         else:
-            SetConsoleColor('Red')
-            print('[{}] Criteria not matched\n'.format(current_time))
-            SetConsoleColor('Reset')
-            action.send_keys(Keys.ARROW_LEFT)
-            action.perform()
-    
+            driver.close()
+
 #initial start actions
 def init():
     driver.get("https://tinder.com/app/recs")
