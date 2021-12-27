@@ -29,8 +29,8 @@ def SetConsoleColor(Color):
 #main swipe function
 def Swipe():
 
-    bioElem = '//*[@id="q633216204"]/div/div[1]/div/main/div[1]/div/div/div[1]/div[1]/div/div[3]/div[3]'  
-    popup1 = '//*[@id="q-1095164872"]/div/div/div[2]/button[2]'
+    bioElem = '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div[1]/div[1]/div/div[3]/div[3]'  
+    popup1 = '/html/body/div[2]/div/div/div[2]/button[2]'
 
     try:
         while(True):
@@ -93,8 +93,8 @@ def init():
     driver.get("https://tinder.com/app/recs")
 
     time.sleep(0.5)
-    driver.find_element_by_xpath('//*[@id="q633216204"]/div/div[2]/div/div/div[1]/button').click()
-    driver.find_element_by_xpath('//*[@id="q633216204"]/div/div[1]/div/main/div[1]/div/div/div/div/header/div/div[2]/div[2]').click()
+    driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/div/div/div[1]/button').click() #cookies
+    driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div/header/div/div[2]/div[2]/a').click() #log in
     cls()
 
     SetConsoleColor('Green')
