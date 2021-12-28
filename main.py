@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+from msedge.selenium_tools import EdgeOptions, Edge
 import os
 import sys
 import time
@@ -10,7 +11,10 @@ keywords = ['Anime', 'Otaku', 'Weeb', 'Gaming', 'Discord', 'Weeaboo', 'Games', '
 
 #webdriver settings
 PATH = "msedgedriver.exe"
-driver = webdriver.Edge(PATH)
+opt = EdgeOptions()
+opt.use_chromium = True
+opt.add_experimental_option('excludeSwitches', ['enable-logging'])
+driver = Edge(executable_path=PATH, options=opt)
 driver.maximize_window()
 
 #function to clear console
