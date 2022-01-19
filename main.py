@@ -7,7 +7,7 @@ import sys
 import time
 
 #keywords to look for
-keywords = ['Anime', 'Otaku', 'Weeb', 'Gaming', 'Discord', 'Weeaboo', 'Games', 'Japan', 'Japanese', 'Japanisch', 'Nerd']
+keywords = ['Anime', 'Otaku', 'Weeb', 'Gaming', 'Discord', 'Weeaboo', 'Games', 'Japan', 'Japanese', 'Japanisch', 'Nerd', 'Asia', 'アニメ']
 
 #webdriver settings
 PATH = "msedgedriver.exe"
@@ -21,7 +21,6 @@ driver.maximize_window()
 def cls():
     os.system('cls' if os.name=='nt' else 'clear')
 
-#function to set console font color
 def SetConsoleColor(Color):
     if Color.lower() == 'green':
         sys.stdout.write("\033[0;32m")
@@ -30,7 +29,6 @@ def SetConsoleColor(Color):
     elif Color.lower() == 'reset':
         sys.stdout.write("\033[0;0m")
 
-#main swipe function
 def Swipe():
 
     bioElem = '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div[1]/div[1]/div/div[3]/div[3]'  
@@ -39,7 +37,6 @@ def Swipe():
     try:
         while(True):
 
-            #create key action
             action = ActionChains(driver)
 
             #kill popups if there are any
@@ -84,7 +81,9 @@ def Swipe():
                 action.send_keys(Keys.ARROW_LEFT)
                 action.perform()
     except:
+        SetConsoleColor('Green')
         print('[{}] No profiles left to swipe (or other exception).\nRetry? (Y/N)'.format(time.strftime("%H:%M:%S", time.localtime())))
+        SetConsoleColor('Reset')
         x = input('')
 
         if x.lower() == 'y':
