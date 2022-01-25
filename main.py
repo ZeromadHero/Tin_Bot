@@ -8,6 +8,8 @@ import time
 
 #keywords to look for
 keywords = ['Anime', 'Otaku', 'Weeb', 'Gaming', 'Discord', 'Weeaboo', 'Games', 'Japan', 'Japanese', 'Japanisch', 'Nerd', 'Asia', 'アニメ']
+#red flags which will not trigger an input prompt
+redFlags = ['Pronouns', 'She/they', 'Asexual', 'Vaxx', 'Vaccinated', 'Impf']
 
 #webdriver settings
 PATH = "msedgedriver.exe"
@@ -52,7 +54,9 @@ def Swipe():
 
             #get biography text
             hit = False
+            redFlagHit = False
             hitWord = ''
+            redFlagWord = ''
             bioText = driver.find_element_by_xpath(bioElem).text
 
             #check if one of the keywords exists in the biography
@@ -62,10 +66,17 @@ def Swipe():
                     hitWord = keyword
                     break
             
-            #if keyword exists wait for input
-            if hit:
+            #check if one of the red flags exists in the biography
+            for redFlag in redFlags:
+                if redFlag in bioText or redFlag.lower() in bioText or redFlag.upper() in bioText:
+                    redFlagHit = True
+                    redFlagWord = redFlag
+                    break
+
+            #if keyword exists and no red flag was found wait for input
+            if hit and not redFlagHit:
                 SetConsoleColor('Green')
-                print('[{}] Found profile with keyword "{}".\nLike? (Y/N)\n'.format(current_time, hitWord))
+                print('[{}] Found profile with keyword "{}".\n           Like? (Y/N)'.format(current_time, hitWord))
                 SetConsoleColor('Reset')
                 x = input('')
                 if x.lower() == 'y':
@@ -76,7 +87,10 @@ def Swipe():
                     action.perform()
             else:
                 SetConsoleColor('Red')
-                print('[{}] Criteria not matched\n'.format(current_time))
+                if redFlagHit:
+                    print('[{}] Criteria not matched -> Red flag: {}\n'.format(current_time, redFlagWord))
+                else:
+                    print('[{}] Criteria not matched\n'.format(current_time))
                 SetConsoleColor('Reset')
                 action.send_keys(Keys.ARROW_LEFT)
                 action.perform()
